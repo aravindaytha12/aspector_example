@@ -1,0 +1,15 @@
+# Logfile created on 2018-12-27 00:12:59 -0500 by logger.rb/56438
+1545887579163 :: 66883660 :: PagesController :: opened_conversations_windows :: STARTED
+1545887579189 :: 66883660 :: PagesController :: opened_conversations_windows :: ENDED
+1545887579199 :: 66883660 :: PagesController :: all_ordered_conversations :: STARTED
+1545887579199 :: 66883660 :: PagesController :: all_ordered_conversations :: ENDED
+1545887579200 :: 66883660 :: PagesController :: index :: STARTED
+1545887579200 :: 66883660 :: PagesController :: index :: STARTED
+1545887579200 :: 66883660 :: PagesController :: protected_new :: STARTED
+1545887579200 :: 66883660 :: PagesController :: protected_new :: ENDED
+1545887579200 :: 66883660 :: PagesController :: private_new :: STARTED
+1545887579201 :: 66883660 :: PagesController :: private_new :: ENDED
+1545887579223 :: 66883660 :: PagesController :: index :: ENDED
+1545887579224 :: 66883660 :: PagesController :: index :: ENDED
+1545887579232 :: 66883660 :: PagesController :: _layout :: STARTED
+1545887579238 :: 66883660 :: PagesController :: _layout :: ENDED
