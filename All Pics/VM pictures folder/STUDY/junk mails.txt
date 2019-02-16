@@ -1,0 +1,187 @@
+
+
+
+
+
+Hi Chris,
+
+I was looking into the mentioned ticket in jira.(https://tools.timeinc.net/jira/browse/IADLEGRPRO-112)
+
+Error Message - A JSON text must at least contain two octets! (JSON::ParserError)
+
+ 
+1) This may be because of somewhere getting the response as 'nil' and hence can able to fix temperorily like:
+ 
+    Existing Line:      
+    JSON.parse(res.body)["success"] == '1' ? {status: :success} : {status: :failure, message: res.body}
+ 
+    New Line:
+    (JSON.parse(res.body).present? && JSON.parse(res.body)["success"] == '1') ? {status: :success} : {status: :failure, message: res.body}
+
+    If really response is coming as nil, need to know why its been coming like that.
+
+2) If possible, please cross check this URL
+    https://stackoverflow.com/questions/8390256/a-json-text-must-at-least-contain-two-octets
+
+3) Also may be some required lines has missed like - 'application/json'
+    https://stackoverflow.com/questions/7200554/what-is-a-json-octet-and-why-are-two-required
+
+4) These may be temporary fixes which I thought, I will be able to give the better solution once i get the proper idea on s3 image uploader case for this 'Community rails' app.
+
+ 
+Note: Since, I do not have the access for VM, I was looking this issue over my cognizant machine only.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+E, [2018-07-10T06:59:23.225871 #23716] ERROR -- : Health Monitor Error for feature 'cdn_upload':  ##<JSON::ParserError: A JSON text must at least contain two octets!>
+ /data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/json-1.8.3/lib/json/common.rb:155:in `initialize'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/json-1.8.3/lib/json/common.rb:155:in `new'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/json-1.8.3/lib/json/common.rb:155:in `parse'
+/data/timeinc/content/prod/rails/deploy/profile/app/controllers/health_monitor_controller.rb:48:in `upload_to_cdn'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:210:in `invoke_health_check'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:202:in `block in monitor_health_of'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/core_ext/benchmark.rb:12:in `block in ms'
+/data/timeinc/packages/ti_ruby22/lib/ruby/2.2.0/benchmark.rb:303:in `realtime'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/core_ext/benchmark.rb:12:in `ms'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:202:in `monitor_health_of'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:191:in `block in monitor_health'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:190:in `each'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:190:in `inject'
+/data/timeinc/content/prod/rails/deploy/profile/lib/old_plugins/health_monitor/health_monitor/health_monitoring.rb:190:in `monitor_health'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/implicit_render.rb:4:in `send_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/abstract_controller/base.rb:198:in `process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/rendering.rb:10:in `process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/abstract_controller/callbacks.rb:20:in `block in process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:117:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:117:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:555:in `block (2 levels) in compile'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:505:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:505:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:498:in `block (2 levels) in around'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:313:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:313:in `block (2 levels) in halting'
+/data/timeinc/content/prod/rails/deploy/profile/app/controllers/application_controller.rb:214:in `verify_cross_domain_requests'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:432:in `block in make_lambda'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:312:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:312:in `block in halting'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:497:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:497:in `block in around'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:505:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:505:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:92:in `__run_callbacks__'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:778:in `_run_process_action_callbacks'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:81:in `run_callbacks'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/abstract_controller/callbacks.rb:19:in `process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/rescue.rb:29:in `process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/instrumentation.rb:32:in `block in process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/notifications.rb:164:in `block in instrument'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/notifications/instrumenter.rb:20:in `instrument'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/notifications.rb:164:in `instrument'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/instrumentation.rb:30:in `process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/params_wrapper.rb:250:in `process_action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/abstract_controller/base.rb:137:in `process'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionview-4.2.6/lib/action_view/rendering.rb:30:in `process'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal.rb:196:in `dispatch'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal/rack_delegation.rb:13:in `dispatch'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_controller/metal.rb:237:in `block in action'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/routing/route_set.rb:74:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/routing/route_set.rb:74:in `dispatch'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/routing/route_set.rb:43:in `serve'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/journey/router.rb:43:in `block in serve'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/journey/router.rb:30:in `each'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/journey/router.rb:30:in `serve'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/routing/route_set.rb:817:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/rack/agent_hooks.rb:30:in `traced_call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/rack/browser_monitoring.rb:32:in `traced_call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rakismet-1.5.2/lib/rakismet/middleware.rb:10:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/omniauth-1.3.1/lib/omniauth/strategy.rb:186:in `call!'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/omniauth-1.3.1/lib/omniauth/strategy.rb:164:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/omniauth-1.3.1/lib/omniauth/builder.rb:63:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-contrib-1.1.0/lib/rack/contrib/jsonp.rb:21:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/app/metal/add_document_domain.rb:17:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/etag.rb:24:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/conditionalget.rb:25:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/head.rb:13:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/params_parser.rb:27:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/flash.rb:260:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/session/abstract/id.rb:225:in `context'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/session/abstract/id.rb:220:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/cookies.rb:560:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/callbacks.rb:29:in `block in call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:88:in `__run_callbacks__'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:778:in `_run_call_callbacks'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/callbacks.rb:81:in `run_callbacks'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/callbacks.rb:27:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/remote_ip.rb:78:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/debug_exceptions.rb:17:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/show_exceptions.rb:30:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/railties-4.2.6/lib/rails/rack/logger.rb:38:in `call_app'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/railties-4.2.6/lib/rails/rack/logger.rb:22:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/lib/ping_logger.rb:34:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/request_id.rb:21:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/methodoverride.rb:22:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-contrib-1.1.0/lib/rack/contrib/runtime.rb:18:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/activesupport-4.2.6/lib/active_support/cache/strategy/local_cache_middleware.rb:28:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-1.6.4/lib/rack/lock.rb:17:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/actionpack-4.2.6/lib/action_dispatch/middleware/static.rb:120:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/rack-contrib-1.1.0/lib/rack/contrib/sendfile.rb:105:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/railties-4.2.6/lib/rails/engine.rb:518:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/railties-4.2.6/lib/rails/application.rb:165:in `call'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/railties-4.2.6/lib/rails/railtie.rb:194:in `public_send'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/railties-4.2.6/lib/rails/railtie.rb:194:in `method_missing'
+/data/timeinc/content/prod/rails/deploy/profile/vendor/bundle/ruby/2.2.0/gems/newrelic_rpm-3.17.2.327/lib/new_relic/agent/instrumentation/middleware_tracing.rb:96:in `call'
+/data/timeinc/packages/passenger/lib/phusion_passenger/rack/thread_handler_extension.rb:74:in `process_request'
+/data/timeinc/packages/passenger/lib/phusion_passenger/request_handler/thread_handler.rb:141:in `accept_and_process_next_request'
+/data/timeinc/packages/passenger/lib/phusion_passenger/request_handler/thread_handler.rb:109:in `main_loop'
+/data/timeinc/packages/passenger/lib/phusion_passenger/request_handler.rb:455:in `block (3 levels) in start_threads'
