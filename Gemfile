@@ -13,7 +13,7 @@ gem 'rails', '~> 5.1.3'
 gem 'devise'
 
 # Use Puma as the app server
-gem 'puma', '~> 3.7'
+gem 'puma', '~> 3.12'
 # Use SCSS for stylesheets
 gem 'bootstrap-sass', '~> 3.3.6'
 gem 'bootstrap_form'
